@@ -5,10 +5,10 @@ var mongoose = require('mongoose'),
 /* Create your schema for the data in the listings.json file that will define how data is saved in your database
      See https://mongoosejs.com/docs/guide.html for examples for creating schemas
      See also https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-  */
+*/
 
 var listingSchema = new Schema({
-  code: {type: String, required: true},
+  code: {type: String, required: true, unique:true},
   name: {type: String, required: true},
   coordinates: {
 	latitude: Number,
@@ -25,22 +25,13 @@ var listingSchema = new Schema({
    See https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
 */
 
-listingSchema.save(function(err) {
- 	 if (err) throw err;
-
-});
-
 listingSchema.pre('save', function(next) {
         var curr = new Date();
-
         this.updated_at = curr;
-
         if(!this.created_at)
                 this.created_at = curr;
-
         next();
 });
-
 
 /* Use your schema to instantiate a Mongoose model */
 //Check out - https://mongoosejs.com/docs/guide.html#models
